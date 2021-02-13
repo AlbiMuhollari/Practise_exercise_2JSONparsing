@@ -1,8 +1,10 @@
 package com.company;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.lang.model.type.ArrayType;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -11,7 +13,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JSONException {
 
 
 
@@ -61,11 +63,27 @@ public class Main {
         }
 
 
-        JSONArray myJson = new JSONArray(matrixArraylist);
+
+        JSONArray myJson = new JSONArray();
+
+        for(int i=0;i<matrixArraylist.size();i++)
+        {
+            JSONObject oneSong = new JSONObject(); //do it inside the array, remember the reference thing with the circles on assignment 3
+            oneSong.put("author",matrixArraylist.get(i)[0]); //so the end one should be an [] because our columns of matrixArraylist are arrays and not arraylist
+            oneSong.put("title", matrixArraylist.get(i)[1]);
+            oneSong.put("year", matrixArraylist.get(i)[2]);
+            oneSong.put("genre", matrixArraylist.get(i)[3]);
+
+            myJson.put(i,oneSong); //we can also do only myJson.put(oneSong) no need for i
+
+        }
+
+
+
 
 
         System.out.println("\n\n");
-        System.out.println(myJson);
+        System.out.println(myJson);   //while printing the objects are not in the order like author, song name, year but that one does not matter
 
 
         //here to save the json file
@@ -93,5 +111,14 @@ public class Main {
 
 
 
+        //now lets try to extract the title of the third song
+
+        JSONObject thirdSong = myJson.getJSONObject(2); //up to here we got the third object of the myJson array,
+        //in line 116 we do not also need to allocate space with the new operator as teh method getJSONObject does the allocation for ourselves
+
+        String thirdStringTitle = thirdSong.getString("title");
+
+        System.out.println("The title of the 3rd song is: " + thirdStringTitle);
+        
         }
 }
